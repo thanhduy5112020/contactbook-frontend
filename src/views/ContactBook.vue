@@ -1,20 +1,17 @@
 <template>
     <div class="page row">
         <div class="col-md-10">
-            <InputSearch v-model="searchText"/>
+            <InputSearch v-model="searchText" />
         </div>
-            
-        
+
+
         <div class="mt-3 col-md-6">
             <h4>
                 Danh bạ
                 <i class="fas fa-address-book"></i>
             </h4>
-            <ContactList
-                v-if="filteredContactsCount > 0"
-                :contacts="filteredContacts"
-                v-model:activeIndex="activeIndex"
-            />
+            <ContactList v-if="filteredContactsCount > 0" :contacts="filteredContacts"
+                v-model:activeIndex="activeIndex" />
             <p v-else>Không có liên hệ nào.</p>
 
             <div class="mt-3 row justify-content-around align-items-center">
@@ -27,10 +24,7 @@
 
                 </button>
 
-                <button
-                    class="btn btn-sm btn-danger"
-                    @click="removeAllContacts"
-                >
+                <button class="btn btn-sm btn-danger" @click="removeAllContacts">
                     <i class="fas fa-trash"></i> Xóa tất cả
                 </button>
             </div>
@@ -41,7 +35,14 @@
                     Chi tiết Liên hệ
                     <i class="fas fa-address-card"></i>
                 </h4>
-                <ContactCard :contact="activeContact"/>
+                <ContactCard :contact="activeContact" />
+                <router-link :to="{
+                    name: 'contact.edit',
+                    params: { id: activeContact._id },
+                }">
+                    <span class="mt-2 badge badge-warning">
+                        <i class="fas fa-edit"></i> Hiệu chỉnh</span>
+                </router-link>
             </div>
 
         </div>
@@ -77,14 +78,14 @@ export default {
         // Chuyển các đối tượng contact thành chuỗi để tiện cho tìm kiếm.
         contactString() {
             return this.contacts.map((contact) => {
-                const { name, email, address, phone} = contact;
+                const { name, email, address, phone } = contact;
                 return [name, email, address, phone].join("");
             });
         },
         // Trả về các contact có chứa thông tin cần tìm kiếm.
         filteredContacts() {
             if (!this.searchText) return this.contacts;
-            return this.contacts.filter((_contact, index) => 
+            return this.contacts.filter((_contact, index) =>
                 this.contactString[index].includes(this.searchText)
             );
         },
@@ -104,7 +105,7 @@ export default {
                 console.log(error);
             }
         },
-        
+
         refreshList() {
             this.retrieveContacts();
             this.activeIndex = -1;
@@ -130,7 +131,7 @@ export default {
 </script>
 
 <style scoped>
-.page{
+.page {
     text-align: center;
     max-width: 750px;
 }
